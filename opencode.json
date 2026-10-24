@@ -1,12 +1,16 @@
 {
   "mcp": {
     "servers": {
-      "smart-notes": {
+      "switch-ai": {
         "type": "local",
         "command": [
           "node",
-          "C:\\Users\\Ahmed Rajput\\.gemini\\antigravity-ide\\scratch\\smart-notes-mcp\\mcp-server.js"
-        ]
+          "C:\\Users\\Ahmed Rajput\\.gemini\\antigravity-ide\\scratch\\smart-notes-mcp\\mcp-server.js",
+          "--token=sk_switchai_demo_ahmed_2026"
+        ],
+        "env": {
+          "SWITCHAI_TOKEN": "sk_switchai_demo_ahmed_2026"
+        }
       }
     }
   }
