@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Switch-Ai — Multi-AI Continuity & Handoff Hub</title>
+  <meta name="description" content="Securely switch and handover project continuity between OpenCode, Antigravity, and ChatGPT when AI limits are reached.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient Glows -->
+  <div class="bg-glow glow-1"></div>
+  <div class="bg-glow glow-2"></div>
+
+  <!-- AUTHENTICATION VIEW (SHOWN WHEN LOGGED OUT) -->
+  <div id="authView" class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <span class="auth-logo">🔄</span>
+        <h2>Switch-Ai</h2>
+        <p>Apna account login karein aur AI connect karein</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLoginBtn">Sign In</button>
+        <button class="auth-tab" id="tabRegisterBtn">Create Account</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" class="auth-form">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="loginUsername" class="custom-input" placeholder="e.g. ahmed" value="ahmed" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" class="custom-input" placeholder="Password" value="password123" required>
+        </div>
+        <button type="submit" class="btn btn-primary full-width">Sign In to Dashboard</button>
+        <p class="auth-hint">Demo Account: <code>ahmed</code> / <code>password123</code></p>
+      </form>
+
+      <!-- Register Form -->
+      <form id="registerForm" class="auth-form" style="display: none;">
+        <div class="form-group">
+          <label>New Username</label>
+          <input type="text" id="regUsername" class="custom-input" placeholder="Choose a username..." required>
+        </div>
+        <div class="form-group">
+          <label>Password (Min 6 chars)</label>
+          <input type="password" id="regPassword" class="custom-input" placeholder="Create password..." minlength="6" required>
+        </div>
+        <button type="submit" class="btn btn-primary full-width">Create Secure Account</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MAIN APP VIEW (SHOWN WHEN LOGGED IN) -->
+  <div id="dashboardView" class="app-layout" style="display: none;">
+    <!-- Top Navigation Header -->
+    <header class="top-header">
+      <div class="brand">
+        <div class="brand-icon">🔄</div>
+        <div>
+          <h1>Switch-Ai <span class="gradient-text">Hub</span></h1>
+          <p class="brand-tagline">Multi-AI Handoff & Continuity Bridge</p>
+        </div>
+      </div>
+
+      <div class="user-profile-controls">
+        <div class="user-chip">
+          <span class="user-avatar">👤</span>
+          <div>
+            <strong id="displayUsername">User</strong>
+            <span class="key-pill" id="displayApiKey" title="Click to copy secret key">sk_switchai_...</span>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-sm" id="btnLogout">Logout</button>
+      </div>
+    </header>
+
+    <!-- SECTION 1: CONNECTED AIS (START AS NONE!) -->
+    <section class="section-card">
+      <div class="section-header">
+        <div>
+          <span class="badge-purple">AI Connections (Security Active 🔒)</span>
+          <h2>Aapke Connected AI Models</h2>
+          <p>Is waqt jo AIs aapke account ke sath connect hain:</p>
+        </div>
+        <button class="btn btn-primary" id="btnOpenConnectWizard">
+          + Connect New AI (OpenCode, Antigravity)
+        </button>
+      </div>
+
+      <div class="connected-ais-grid" id="connectedAisGrid">
+        <!-- Rendered dynamically: Starts with empty state! -->
+      </div>
+    </section>
+
+    <!-- SECTION 2: ONE-CLICK AI SWITCHER (THE PULL BRIDGE) -->
+    <section class="section-card switcher-box">
+      <div class="section-header">
+        <div>
+          <span class="badge-accent">1-Click Switch</span>
+          <h2>AI Switcher (Kaam Ek AI Se Dusre AI Transfer Karein)</h2>
+          <p>Jab kisi AI ki limit khatam ho jaye, to yahan se baton pass karein:</p>
+        </div>
+      </div>
+
+      <form id="switchForm" class="switcher-form">
+        <div class="steps-row">
+          <div class="step-card">
+            <span class="step-badge">From</span>
+            <label>Kis AI ki limit khatam hui?</label>
+            <select id="switchFromSelect" class="custom-input select-danger">
+              <option value="ChatGPT">ChatGPT (GPT-4o)</option>
+              <option value="OpenCode">OpenCode CLI</option>
+              <option value="Antigravity">Antigravity IDE</option>
+              <option value="Claude">Claude 3.5</option>
+            </select>
+          </div>
+
+          <div class="arrow-indicator">➡️</div>
+
+          <div class="step-card">
+            <span class="step-badge green">To</span>
+            <label>Ab kis AI ko kaam dena hai?</label>
+            <select id="switchToSelect" class="custom-input select-success">
+              <option value="Antigravity">Antigravity IDE</option>
+              <option value="OpenCode">OpenCode CLI</option>
+              <option value="ChatGPT">ChatGPT</option>
+              <option value="Claude">Claude 3.5</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="task-input-box">
+          <label>Naya AI kahan se kaam shuru karega? (Next Task):</label>
+          <div class="input-action-row">
+            <input type="text" id="switchNextTaskInput" class="custom-input" placeholder="e.g. Continue developing the user authentication endpoints..." value="Continue the project implementation from the next step" required>
+            <button type="submit" class="btn btn-switch" id="btnSwitchSubmit">
+              🔄 Switch AI & Generate Prompt
+            </button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- SECTION 3: GENERATED CONTINUATION BRIEF (AUTO-POPULATES) -->
+    <section class="result-card" id="resultCard">
+      <div class="result-header">
+        <div>
+          <span class="badge-success">✅ Continuation Prompt Tayar Hai</span>
+          <h3 id="resultTitle">ChatGPT ➡️ Antigravity</h3>
+          <p>Naye AI me yeh prompt paste karein ya OpenCode me chalaein:</p>
+        </div>
+        <button class="btn btn-copy-big" id="btnCopyPrompt">
+          📋 1-Click Copy Prompt
+        </button>
+      </div>
+
+      <div class="code-preview-box">
+        <pre><code id="promptCodePreview">Loading continuation brief...</code></pre>
+      </div>
+    </section>
+
+    <!-- SECTION 4: REPOSITORY & VERCEL DEPLOYMENT INFO -->
+    <section class="section-card repo-card">
+      <div class="repo-info-content">
+        <div class="repo-icon">🐙</div>
+        <div>
+          <h4>GitHub Repository & Vercel Deployment</h4>
+          <p>Repo: <code>https://github.com/ahmedrajpoot2582-cloud/Switch-Ai.git</code></p>
+          <small class="text-muted">Vercel Configuration Ready (<code>vercel.json</code> & Serverless API Handler)</small>
+        </div>
+      </div>
+      <button class="btn btn-secondary btn-sm" id="btnGitSync">
+        🚀 Deploy to Vercel Guide
+      </button>
+    </section>
+  </div>
+
+  <!-- MODAL: CONNECT AI WIZARD -->
+  <div class="modal-backdrop" id="connectWizardModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <span class="badge-purple">Security Token Handshake</span>
+          <h3>AI Connect Wizard</h3>
+        </div>
+        <button class="modal-close" data-close="connectWizardModal">&times;</button>
+      </div>
+
+      <div class="wizard-step-1">
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 14px;">
+          Aap kaunsa AI connect karna chahte hain? Select karein:
+        </p>
+        <div class="ai-pick-grid">
+          <button type="button" class="ai-pick-btn active" data-ai="opencode">
+            <span class="ai-icon">⚡</span>
+            <strong>OpenCode CLI</strong>
+            <small>Terminal AI</small>
+          </button>
+          <button type="button" class="ai-pick-btn" data-ai="antigravity">
+            <span class="ai-icon">🚀</span>
+            <strong>Antigravity IDE</strong>
+            <small>DeepMind IDE</small>
+          </button>
+          <button type="button" class="ai-pick-btn" data-ai="chatgpt">
+            <span class="ai-icon">🟢</span>
+            <strong>ChatGPT</strong>
+            <small>Web / Prompt</small>
+          </button>
+          <button type="button" class="ai-pick-btn" data-ai="claude">
+            <span class="ai-icon">🟣</span>
+            <strong>Claude Desktop</strong>
+            <small>Anthropic</small>
+          </button>
+        </div>
+      </div>
+
+      <div class="wizard-prompt-box">
+        <label id="wizardLabel">OpenCode me run karne ke liye command:</label>
+        <pre><code id="wizardCommandCode">Loading command...</code></pre>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close="connectWizardModal">Close</button>
+        <button type="button" class="btn btn-primary" id="btnCopyWizardCmd">
+          📋 Copy Command & Connect
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

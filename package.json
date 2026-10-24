@@ -1,0 +1,27 @@
+{
+  "name": "smart-notes-mcp",
+  "version": "1.0.0",
+  "description": "Smart Notes & Task Manager with Model Context Protocol (MCP) Server",
+  "main": "web-server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node web-server.js",
+    "mcp": "node mcp-server.js"
+  },
+  "keywords": [
+    "mcp",
+    "notes",
+    "tasks",
+    "ai",
+    "model-context-protocol"
+  ],
+  "author": "Antigravity",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "isomorphic-git": "^1.44.4",
+    "zod": "^3.24.2"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "mcp": {
+    "servers": {
+      "smart-notes": {
+        "type": "local",
+        "command": [
+          "node",
+          "C:\\Users\\Ahmed Rajput\\.gemini\\antigravity-ide\\scratch\\smart-notes-mcp\\mcp-server.js"
+        ]
+      }
+    }
+  }
+}
